@@ -1,0 +1,40 @@
+package frc.team972.robot.subsystems;
+
+import edu.wpi.first.wpilibj.Compressor;
+
+public class compressorSubsystem {
+    private static Compressor compressor = new Compressor(-1, -1);
+    private static boolean pressure = compressor.getPressureSwitchValue();
+    private static boolean manualValue;
+    public static void autoCompress(){
+        if(!pressure){
+            compressor.start();
+        }
+        else{
+            compressor.stop();
+        }
+    }
+    public static boolean getPressure(){
+        return pressure;
+    }
+    public static void manualControl(){
+        if(manualValue){
+            compressor.start();
+        }
+        else{
+            compressor.stop();
+        }
+    }
+    public static boolean checkSys(){
+        if(compressor.getCompressorCurrentTooHighFault() || compressor.getCompressorShortedFault() || compressor.getCompressorNotConnectedFault()){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    public static double getCurrent(){
+        return compressor.getCompressorCurrent();
+    }
+
+}
