@@ -8,6 +8,8 @@ public class HatchIntakeSubsystem extends Subsystem {
     private static HatchIntakeSubsystem mInstance = new HatchIntakeSubsystem();
     private DoubleSolenoid mIntakeSolenoid;
     private boolean desiredSolenoidState = false;
+    private int quickIntakeOuttakeTimer = 100;
+    private int quickTimer2 = 100;
 
     public void writeToLog() {
     }
@@ -44,5 +46,37 @@ public class HatchIntakeSubsystem extends Subsystem {
 
     public static HatchIntakeSubsystem getInstance() {
         return mInstance;
+    }
+    //quick intake activated with a press of a button(alignment not included);
+    public static void quickIntake(){
+        if(desiredSolenoidState){
+            mIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+            if(quickIntakeTimer != 0) {
+                quickIntakeOuttakeTimer--;
+            }
+            if(quickIntakeTimer == 0){
+                Drive(-1, -1);
+                quickTimer --;
+            }
+            if(quickTimer == 0){
+                quickIntakeOuttakeTimer = 100;
+            }
+        }
+    }
+    //quick intake but outtake-ized
+    public static void quickOuttake(){
+        if(!desiredSolenoidState){
+            mIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+            if(quickIntakeTimer != 0) {
+                quickIntakeOuttakeTimer--;
+            }
+            if(quickIntakeTimer == 0){
+                Drive(-1, -1);
+                quickTimer --;
+            }
+            if(quickTimer == 0){
+                quickIntakeOuttakeTimer = 100;
+            }
+        }
     }
 }
